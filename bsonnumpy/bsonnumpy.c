@@ -1010,38 +1010,39 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
 //        Py_DECREF(binary_doc);
     }
 
-check_row_count:
-    if (row < num_documents) {
-        PyObject *none_obj;
-        PyArray_Dims newshape = {dimension_lengths, number_dimensions};
-        if (debug_mode) {
-            printf("resizing from %d to %d\n", num_documents, row);
-        }
+//check_row_count:
+//    if (row < num_documents) {
+//        PyObject *none_obj;
+//        PyArray_Dims newshape = {dimension_lengths, number_dimensions};
+//        if (debug_mode) {
+//            printf("resizing from %d to %d\n", num_documents, row);
+//        }
+//
+//        dimension_lengths[0] = row;
+//        /* returns None or NULL */
+//        none_obj = PyArray_Resize((PyArrayObject *) array_obj, &newshape,
+//                                  false /* refcheck */, NPY_CORDER);
+//
+//        Py_XDECREF(none_obj);
+//    }
+//
+//done:
+//    Py_XDECREF(iterator_obj);
+//    free(array_coordinates);
+//    parsed_dtype_destroy(parsed_dtype);
+//    Py_XDECREF(ndarray);
+//    Py_XDECREF(iterable_obj);
+//    Py_XDECREF(iterator_obj);
+//    Py_XDECREF(binary_doc);
+//    Py_XDECREF(dtype);
+//
+//    if (PyErr_Occurred()) {
+//        Py_XDECREF(array_obj);
+//        return NULL;
+//    }
 
-        dimension_lengths[0] = row;
-        /* returns None or NULL */
-        none_obj = PyArray_Resize((PyArrayObject *) array_obj, &newshape,
-                                  false /* refcheck */, NPY_CORDER);
-
-        Py_XDECREF(none_obj);
-    }
-
-done:
-    Py_XDECREF(iterator_obj);
-    free(array_coordinates);
-    parsed_dtype_destroy(parsed_dtype);
-    Py_XDECREF(ndarray);
-    Py_XDECREF(iterable_obj);
-    Py_XDECREF(iterator_obj);
-    Py_XDECREF(binary_doc);
-    Py_XDECREF(dtype);
-
-    if (PyErr_Occurred()) {
-        Py_XDECREF(array_obj);
-        return NULL;
-    }
-
-    return array_obj;
+//    return array_obj;
+    return NULL
 }
 
 /* Stub */
