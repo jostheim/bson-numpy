@@ -323,7 +323,7 @@ debug(char* message, PyObject* object, bson_t* doc)
 static void
 init_debug_mode(void)
 {
-    debug_mode = true //(NULL != getenv("BSON_NUMPY_DEBUG"));
+    debug_mode = true; //(NULL != getenv("BSON_NUMPY_DEBUG"));
 }
 
 
