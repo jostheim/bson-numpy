@@ -323,7 +323,7 @@ debug(char* message, PyObject* object, bson_t* doc)
 static void
 init_debug_mode(void)
 {
-    debug_mode = (NULL != getenv("BSON_NUMPY_DEBUG"));
+    debug_mode = true //(NULL != getenv("BSON_NUMPY_DEBUG"));
 }
 
 
@@ -864,150 +864,150 @@ done:
 static PyObject *
 sequence_to_ndarray(PyObject *self, PyObject *args)
 {
-    PyObject *array_obj = NULL;
-    PyObject *iterable_obj = NULL;
-    PyObject *iterator_obj = NULL;
-    PyObject *binary_doc = NULL;
-    PyArray_Descr *dtype = NULL;
-    PyArrayObject *ndarray = NULL;
-    parsed_dtype_t *parsed_dtype = NULL;
-
-    int num_documents;
-    int number_dimensions = 1;
-    npy_intp *array_coordinates = NULL;
-    int row = 0;
-    npy_intp dimension_lengths[100];
-    npy_intp doc_coordinates[100];
-
-    if (!PyArg_ParseTuple(args, "OO&i", &iterator_obj, PyArray_DescrConverter,
-                          &dtype, &num_documents)) {
-        return NULL;
-    }
-
-    if (PyIter_Check(iterator_obj)) {
-        Py_INCREF(iterator_obj);
-    } else {
-        /* it's not an iterator, maybe it's iterable? */
-        iterable_obj = iterator_obj;
-        iterator_obj = PyObject_GetIter(iterable_obj);
-        if (!iterator_obj) {
-            PyErr_SetString(PyExc_TypeError,
-                            "sequence_to_ndarray requires an iterator");
-            Py_DECREF(dtype);
-            goto done;
-        }
-    }
-
-    if (num_documents < 0) {
-        PyErr_SetString(BsonNumpyError,
-                        "count argument was negative");
-        Py_DECREF(dtype);
-        goto done;
-    }
-
-    parsed_dtype = parse_dtype(dtype, NULL);
-    if (!parsed_dtype) {
-        Py_DECREF(dtype);
-        goto done;
-    }
-
-    dimension_lengths[0] = num_documents;
-
-    /* This function steals a reference to dtype */
-    array_obj = PyArray_Zeros(1, dimension_lengths, dtype, 0);
-    if (!array_obj) {
-        PyErr_SetString(BsonNumpyError,
-                        "ndarray initialization failed");
-        goto done;
-    }
-
-    if (NPY_FAIL == PyArray_OutputConverter(array_obj, &ndarray)) {
-        debug("PyArray_OutputConverter failed with array object",
-              array_obj, NULL);
-        PyErr_SetString(BsonNumpyError,
-                        "ndarray initialization failed");
-        goto done;
-    }
-
-    array_coordinates = calloc(1 + number_dimensions, sizeof(npy_intp));
-
-    /* For each document in the collection, fill row of ndarray */
-    while ((binary_doc = PyIter_Next(iterator_obj))) {
-        const char *bytes_str;
-        Py_ssize_t bytes_len;
-        Py_ssize_t pos = 0;
-
-        if (!PyBytes_Check(binary_doc)) {
-            PyErr_SetString(PyExc_TypeError,
-                            "sequence_to_ndarray requires sequence of bytes"
-                                " objects");
-            goto done;
-        }
-
-        bytes_str = PyBytes_AS_STRING(binary_doc);
-        bytes_len = PyBytes_GET_SIZE(binary_doc);
-
-        if (bytes_len < 5) {
-            Py_XDECREF(iterator_obj);
-            free(array_coordinates);
-            parsed_dtype_destroy(parsed_dtype);
-            Py_XDECREF(ndarray);
-            Py_XDECREF(iterable_obj);
-            Py_XDECREF(iterator_obj);
-            Py_XDECREF(binary_doc);
-            Py_XDECREF(dtype);
-            INVALID("must be at least 5 bytes");
-        }
-
-        while (pos < bytes_len) {
-            uint32_t len_le;
-            uint32_t len;
-            bson_t document;
-
-            memcpy (&len_le, bytes_str + pos, sizeof(len_le));
-            len = BSON_UINT32_FROM_LE (len_le);
-            if (len > (uint32_t) bytes_len) {
-                Py_XDECREF(iterator_obj);
-                free(array_coordinates);
-                parsed_dtype_destroy(parsed_dtype);
-                Py_XDECREF(ndarray);
-                Py_XDECREF(iterable_obj);
-                Py_XDECREF(iterator_obj);
-                Py_XDECREF(binary_doc);
-                Py_XDECREF(dtype);
-                INVALID("incomplete batch");
-            }
-
-            bool r = bson_init_static(&document, (uint8_t *) (bytes_str + pos),
-                                      len);
-            if (!r) {
-                Py_XDECREF(iterator_obj);
-                free(array_coordinates);
-                parsed_dtype_destroy(parsed_dtype);
-                Py_XDECREF(ndarray);
-                Py_XDECREF(iterable_obj);
-                Py_XDECREF(iterator_obj);
-                Py_XDECREF(binary_doc);
-                Py_XDECREF(dtype);
-                INVALID("incorrect length");
-            }
-
-            /* current_depth = 1 because layer 0 is the whole sequence */
+//    PyObject *array_obj = NULL;
+//    PyObject *iterable_obj = NULL;
+//    PyObject *iterator_obj = NULL;
+//    PyObject *binary_doc = NULL;
+//    PyArray_Descr *dtype = NULL;
+//    PyArrayObject *ndarray = NULL;
+//    parsed_dtype_t *parsed_dtype = NULL;
+//
+//    int num_documents;
+//    int number_dimensions = 1;
+//    npy_intp *array_coordinates = NULL;
+//    int row = 0;
+//    npy_intp dimension_lengths[100];
+//    npy_intp doc_coordinates[100];
+//
+//    if (!PyArg_ParseTuple(args, "OO&i", &iterator_obj, PyArray_DescrConverter,
+//                          &dtype, &num_documents)) {
+//        return NULL;
+//    }
+//
+//    if (PyIter_Check(iterator_obj)) {
+//        Py_INCREF(iterator_obj);
+//    } else {
+//        /* it's not an iterator, maybe it's iterable? */
+//        iterable_obj = iterator_obj;
+//        iterator_obj = PyObject_GetIter(iterable_obj);
+//        if (!iterator_obj) {
+//            PyErr_SetString(PyExc_TypeError,
+//                            "sequence_to_ndarray requires an iterator");
+//            Py_DECREF(dtype);
+//            goto done;
+//        }
+//    }
+//
+//    if (num_documents < 0) {
+//        PyErr_SetString(BsonNumpyError,
+//                        "count argument was negative");
+//        Py_DECREF(dtype);
+//        goto done;
+//    }
+//
+//    parsed_dtype = parse_dtype(dtype, NULL);
+//    if (!parsed_dtype) {
+//        Py_DECREF(dtype);
+//        goto done;
+//    }
+//
+//    dimension_lengths[0] = num_documents;
+//
+//    /* This function steals a reference to dtype */
+//    array_obj = PyArray_Zeros(1, dimension_lengths, dtype, 0);
+//    if (!array_obj) {
+//        PyErr_SetString(BsonNumpyError,
+//                        "ndarray initialization failed");
+//        goto done;
+//    }
+//
+//    if (NPY_FAIL == PyArray_OutputConverter(array_obj, &ndarray)) {
+//        debug("PyArray_OutputConverter failed with array object",
+//              array_obj, NULL);
+//        PyErr_SetString(BsonNumpyError,
+//                        "ndarray initialization failed");
+//        goto done;
+//    }
+//
+//    array_coordinates = calloc(1 + number_dimensions, sizeof(npy_intp));
+//
+//    /* For each document in the collection, fill row of ndarray */
+//    while ((binary_doc = PyIter_Next(iterator_obj))) {
+//        const char *bytes_str;
+//        Py_ssize_t bytes_len;
+//        Py_ssize_t pos = 0;
+//
+//        if (!PyBytes_Check(binary_doc)) {
+//            PyErr_SetString(PyExc_TypeError,
+//                            "sequence_to_ndarray requires sequence of bytes"
+//                                " objects");
+//            goto done;
+//        }
+//
+//        bytes_str = PyBytes_AS_STRING(binary_doc);
+//        bytes_len = PyBytes_GET_SIZE(binary_doc);
+//
+//        if (bytes_len < 5) {
+//            Py_XDECREF(iterator_obj);
+//            free(array_coordinates);
+//            parsed_dtype_destroy(parsed_dtype);
+//            Py_XDECREF(ndarray);
+//            Py_XDECREF(iterable_obj);
+//            Py_XDECREF(iterator_obj);
+//            Py_XDECREF(binary_doc);
+//            Py_XDECREF(dtype);
+//            INVALID("must be at least 5 bytes");
+//        }
+//
+//        while (pos < bytes_len) {
+//            uint32_t len_le;
+//            uint32_t len;
+//            bson_t document;
+//
+//            memcpy (&len_le, bytes_str + pos, sizeof(len_le));
+//            len = BSON_UINT32_FROM_LE (len_le);
+//            if (len > (uint32_t) bytes_len) {
+//                Py_XDECREF(iterator_obj);
+//                free(array_coordinates);
+//                parsed_dtype_destroy(parsed_dtype);
+//                Py_XDECREF(ndarray);
+//                Py_XDECREF(iterable_obj);
+//                Py_XDECREF(iterator_obj);
+//                Py_XDECREF(binary_doc);
+//                Py_XDECREF(dtype);
+//                INVALID("incomplete batch");
+//            }
+//
+//            bool r = bson_init_static(&document, (uint8_t *) (bytes_str + pos),
+//                                      len);
+//            if (!r) {
+//                Py_XDECREF(iterator_obj);
+//                free(array_coordinates);
+//                parsed_dtype_destroy(parsed_dtype);
+//                Py_XDECREF(ndarray);
+//                Py_XDECREF(iterable_obj);
+//                Py_XDECREF(iterator_obj);
+//                Py_XDECREF(binary_doc);
+//                Py_XDECREF(dtype);
+//                INVALID("incorrect length");
+//            }
+//
+//            /* current_depth = 1 because layer 0 is the whole sequence */
 //            if (!_load_document_from_bson(&document, ndarray, parsed_dtype,
 //                                          array_coordinates, 1, doc_coordinates,
 //                                          0, 0)) {
 //                /* error set by _load_document_from_bson */
 //                goto done;
 //            }
-
-            array_coordinates[0] = ++row;
-            if (row >= num_documents) {
-                goto check_row_count;
-            }
-
-            pos += len;
-        }
-        Py_DECREF(binary_doc);
+//
+//            array_coordinates[0] = ++row;
+//            if (row >= num_documents) {
+//                goto check_row_count;
+//            }
+//
+//            pos += len;
+//        }
+//        Py_DECREF(binary_doc);
     }
 
 check_row_count:
