@@ -1008,7 +1008,7 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
 //            pos += len;
 //        }
 //        Py_DECREF(binary_doc);
-    }
+//    }
 
 //check_row_count:
 //    if (row < num_documents) {
