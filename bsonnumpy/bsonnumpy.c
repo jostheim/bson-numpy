@@ -1032,7 +1032,7 @@ done:
     free(array_coordinates);
     parsed_dtype_destroy(parsed_dtype);
 // Py_XDECREF(ndarray);
-    Py_XDECREF(iterable_obj);
+//    Py_XDECREF(iterable_obj);
     Py_XDECREF(binary_doc);
     Py_XDECREF(dtype);
     if (PyErr_Occurred()) {
