@@ -297,7 +297,7 @@ _load_document_from_bson(
     npy_intp *doc_coordinates, int doc_depth, npy_intp offset);
 
 
-static bool debug_mode = true;
+static bool debug_mode = false;
 
 static void
 debug(char* message, PyObject* object, bson_t* doc)
@@ -323,7 +323,7 @@ debug(char* message, PyObject* object, bson_t* doc)
 static void
 init_debug_mode(void)
 {
-    debug_mode = true; //(NULL != getenv("BSON_NUMPY_DEBUG"));
+    debug_mode = (NULL != getenv("BSON_NUMPY_DEBUG"));
 }
 
 
@@ -864,8 +864,6 @@ done:
 static PyObject *
 sequence_to_ndarray(PyObject *self, PyObject *args)
 {
-      printf("starting");
-
     PyObject *array_obj = NULL;
     PyObject *iterable_obj = NULL;
     PyObject *iterator_obj = NULL;
@@ -1044,7 +1042,6 @@ done:
     }
 
     return array_obj;
-//    return NULL;
 }
 
 /* Stub */
