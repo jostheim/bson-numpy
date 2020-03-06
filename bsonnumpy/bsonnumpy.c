@@ -948,14 +948,14 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
         bytes_len = PyBytes_GET_SIZE(binary_doc);
 
         if (bytes_len < 5) {
-            Py_XDECREF(iterator_obj);
-            free(array_coordinates);
-            parsed_dtype_destroy(parsed_dtype);
-            Py_XDECREF(ndarray);
-            Py_XDECREF(iterable_obj);
-            Py_XDECREF(iterator_obj);
-            Py_XDECREF(binary_doc);
-            Py_XDECREF(dtype);
+//            Py_XDECREF(iterator_obj);
+//            free(array_coordinates);
+//            parsed_dtype_destroy(parsed_dtype);
+//            Py_XDECREF(ndarray);
+//            Py_XDECREF(iterable_obj);
+//            Py_XDECREF(iterator_obj);
+//            Py_XDECREF(binary_doc);
+//            Py_XDECREF(dtype);
             INVALID("must be at least 5 bytes");
         }
 
@@ -967,28 +967,28 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
             memcpy (&len_le, bytes_str + pos, sizeof(len_le));
             len = BSON_UINT32_FROM_LE (len_le);
             if (len > (uint32_t) bytes_len) {
-                Py_XDECREF(iterator_obj);
-                free(array_coordinates);
-                parsed_dtype_destroy(parsed_dtype);
-                Py_XDECREF(ndarray);
-                Py_XDECREF(iterable_obj);
-                Py_XDECREF(iterator_obj);
-                Py_XDECREF(binary_doc);
-                Py_XDECREF(dtype);
+//                Py_XDECREF(iterator_obj);
+//                free(array_coordinates);
+//                parsed_dtype_destroy(parsed_dtype);
+//                Py_XDECREF(ndarray);
+//                Py_XDECREF(iterable_obj);
+//                Py_XDECREF(iterator_obj);
+//                Py_XDECREF(binary_doc);
+//                Py_XDECREF(dtype);
                 INVALID("incomplete batch");
             }
 
             bool r = bson_init_static(&document, (uint8_t *) (bytes_str + pos),
                                       len);
             if (!r) {
-                Py_XDECREF(iterator_obj);
-                free(array_coordinates);
-                parsed_dtype_destroy(parsed_dtype);
-                Py_XDECREF(ndarray);
-                Py_XDECREF(iterable_obj);
-                Py_XDECREF(iterator_obj);
-                Py_XDECREF(binary_doc);
-                Py_XDECREF(dtype);
+//                Py_XDECREF(iterator_obj);
+//                free(array_coordinates);
+//                parsed_dtype_destroy(parsed_dtype);
+//                Py_XDECREF(ndarray);
+//                Py_XDECREF(iterable_obj);
+//                Py_XDECREF(iterator_obj);
+//                Py_XDECREF(binary_doc);
+//                Py_XDECREF(dtype);
                 INVALID("incorrect length");
             }
 
@@ -1027,6 +1027,7 @@ check_row_count:
     }
 
 done:
+    printf('done');
     Py_XDECREF(iterator_obj);
     free(array_coordinates);
     parsed_dtype_destroy(parsed_dtype);
