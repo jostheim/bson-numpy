@@ -864,6 +864,8 @@ done:
 static PyObject *
 sequence_to_ndarray(PyObject *self, PyObject *args)
 {
+      printf("starting");
+
 //    PyObject *array_obj = NULL;
 //    PyObject *iterable_obj = NULL;
 //    PyObject *iterator_obj = NULL;
