@@ -1042,7 +1042,7 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
 //    }
 
 //    return array_obj;
-    return NULL
+    return NULL;
 }
 
 /* Stub */
