@@ -1027,7 +1027,7 @@ check_row_count:
     }
 
 done:
-    printf("done");
+//    printf("done");
     Py_XDECREF(iterator_obj);
     free(array_coordinates);
     parsed_dtype_destroy(parsed_dtype);
