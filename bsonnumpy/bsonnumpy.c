@@ -19,7 +19,7 @@
 #include "bsonnumpy_field_order.h"
 
 
-#define MAX_DTYPE_NESTING 100024
+#define MAX_DTYPE_NESTING 32
 
 static PyObject *BsonNumpyError;
 
@@ -876,8 +876,8 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
     int number_dimensions = 1;
     npy_intp *array_coordinates = NULL;
     int row = 0;
-    npy_intp dimension_lengths[100000];
-    npy_intp doc_coordinates[100000];
+    npy_intp dimension_lengths[100];
+    npy_intp doc_coordinates[100];
 
     if (!PyArg_ParseTuple(args, "OO&i", &iterator_obj, PyArray_DescrConverter,
                           &dtype, &num_documents)) {
