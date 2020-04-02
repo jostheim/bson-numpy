@@ -814,7 +814,7 @@ _load_document_from_bson(
 
             key = bson_iter_key(&bsonit);
             i = table_lookup(&parsed->table, key);
-            printf("field order_set");
+//            printf("field order_set");
             field_order_set(&parsed->field_order, bson_index, key, i);
 
             if (i == EMPTY) {
