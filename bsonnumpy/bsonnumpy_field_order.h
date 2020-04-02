@@ -85,7 +85,7 @@ field_order_match(field_order_t *order, size_t bson_index, bson_iter_t *it,
     }
 
     next_key = (const char *) (it->raw + it->next_off + 1);
-    printf("resizing from %s to %s\n", next_key, elem->key.s);
+    printf("next_key %s elem  %s len %d \n", next_key, elem->key.s, elem->key.len);
     if (0 != memcmp(next_key, elem->key.s, elem->key.len)) {
         return false;
     }
