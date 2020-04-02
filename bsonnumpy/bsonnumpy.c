@@ -846,6 +846,7 @@ done:
             return 0;
         }
     }
+    bson_free(doc);
 
     parsed->field_order_valid = true;
 //    bson_free(document)
@@ -973,7 +974,6 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
                                           array_coordinates, 1, doc_coordinates,
                                           0, 0)) {
                 /* error set by _load_document_from_bson */
-                bson_free(document);
                 goto done;
             }
 
