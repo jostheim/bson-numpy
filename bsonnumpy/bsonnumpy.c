@@ -787,6 +787,7 @@ _load_document_from_bson(
 
     while (true) {
         if (parsed->field_order_valid) {
+
             if (!field_order_match(&parsed->field_order, bson_index, &bsonit,
                                    &elem)) {
                 parsed->field_order_valid = false;
@@ -973,7 +974,7 @@ sequence_to_ndarray(PyObject *self, PyObject *args)
                                           array_coordinates, 1, doc_coordinates,
                                           0, 0)) {
                 /* error set by _load_document_from_bson */
-                bson_free(document);
+//                bson_free(document);
 
                 goto done;
             }
