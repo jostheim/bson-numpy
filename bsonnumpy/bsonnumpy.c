@@ -846,7 +846,7 @@ done:
             return 0;
         }
     }
-    bson_free(doc);
+    bson_free(document);
 
     parsed->field_order_valid = true;
 //    bson_free(document)
