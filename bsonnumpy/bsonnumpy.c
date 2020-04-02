@@ -848,7 +848,7 @@ done:
     }
 
     parsed->field_order_valid = true;
-
+//    bson_free(document)
     return 1;
 }
 
@@ -1008,6 +1008,7 @@ done:
     free(array_coordinates);
     parsed_dtype_destroy(parsed_dtype);
 // Py_XDECREF(ndarray);
+    bson_free(document)
     Py_XDECREF(iterable_obj);
     Py_XDECREF(binary_doc);
 //    Py_XDECREF(dtype);
