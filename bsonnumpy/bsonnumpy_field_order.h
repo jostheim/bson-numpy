@@ -54,7 +54,7 @@ field_order_set(field_order_t *order, size_t bson_index, const char *key,
         order->elems = bson_realloc(
             order->elems, order->maxsize * sizeof(field_order_elem_t));
     }
-//    printf("field_order_set key: %s dtype_index: %d", key, dtype_index);
+    printf("field_order_set key: %s dtype_index: %d\n", key, dtype_index);
     bsnp_string_init(&order->elems[bson_index].key, key);
     order->elems[bson_index].dtype_index = dtype_index;
     order->n_elems = BSON_MAX(bson_index + 1, order->n_elems);
